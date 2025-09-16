@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Junior Barber Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --fg: #ffffff;
+      --accent: #e11d48; /* rojo elegante */
+      --muted: #9ca3af;
+      --maxw: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.4;
+    }
+
+    header {
+      width: 100%;
+      border-bottom: 1px solid #111;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.04), rgba(255,255,255,0));
+    }
+
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .title {
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      font-size: clamp(28px, 6vw, 56px);
+      margin: 6px 0 4px;
+    }
+
+    .subtitle {
+      font-size: clamp(12px, 2.5vw, 16px);
+      color: var(--muted);
+      margin: 0 0 8px;
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    main {
+      display: grid;
+      place-items: center;
+      min-height: calc(100dvh - 140px);
+      padding: 24px 20px 48px;
+    }
+
+    /* Contenedor de foto centrada */
+    .photo-frame {
+      width: min(92vw, 900px);
+      aspect-ratio: 16 / 9;       /* Cambia la proporción si quieres 1/1, 4/5, etc. */
+      border: 2px dashed #333;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(80% 80% at 50% 30%, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Si añades una imagen, esta clase la ajusta centrada y recortada */
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Contiene el encuadre sin deformar */
+      display: none;     /* por defecto oculto hasta que pongas tu foto */
+    }
+
+    .placeholder {
+      text-align: center;
+      color: #cbd5e1;
+    }
+
+    .placeholder .icon {
+      font-size: 56px;
+      line-height: 1;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 16px 0 28px;
+    }
+
+    /* Botón opcional (por si luego añades reserva/contacto) */
+    .btn {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid #222;
+      color: var(--fg);
+      text-decoration: none;
+      background: linear-gradient(180deg, #171717, #0b0b0b);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+      transition: transform .06s ease, background .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="title">Junior <span class="accent">Barber Shop</span></div>
+      <p class="subtitle">Cortes clásicos • Fades • Barbas impecables</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="photo-frame" id="photoFrame">
+      <!-- OPCIÓN A: Lugar para tu foto (por defecto se ve el placeholder) -->
+      <div class="placeholder" id="placeholder">
+        <div class="icon">💈</div>
+        <div><strong>Tu foto aquí</strong></div>
+        <div style="font-size:13px; color:#94a3b8; margin-top:6px;">
+          Reemplaza la imagen en el código o haz click para seleccionar un archivo
+        </div>
+        <a class="btn" href="#" id="uploadBtn">Subir foto</a>
+      </div>
+
+      <!-- OPCIÓN B: Descomenta la línea de abajo y pon la URL de tu imagen -->
+      <!-- <img id="heroPhoto" src="URL_DE_TU_FOTO.jpg" alt="Junior Barber Shop"> -->
+      <input type="file" id="fileInput" accept="image/*" style="display:none" />
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Junior Barber Shop. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    // Año automático en el footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Subida rápida de foto local (no se envía a ningún servidor)
+    const uploadBtn = document.getElementById("uploadBtn");
+    const fileInput = document.getElementById("fileInput");
+    const frame = document.getElementById("photoFrame");
+    const placeholder = document.getElementById("placeholder");
+
+    uploadBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const img = document.getElementById("heroPhoto") || document.createElement("img");
+      img.id = "heroPhoto";
+      img.alt = "Junior Barber Shop";
+      img.style.display = "block";
+      img.src = URL.createObjectURL(file);
+
+      // Limpiar placeholder y mostrar imagen
+      placeholder?.remove();
+      frame.appendChild(img);
+    });
+  </script>
+</body>
+</html>
